@@ -1,20 +1,24 @@
 // import { PrismaClient } from "@prisma/client";
+
+import { GetStaticProps, InferGetStaticPropsType } from "next";
 import Head from "next/head";
 // const prisma = new PrismaClient();
-import { signIn, signOut, useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 
-import Header from "../components/Header";
+import LoginForm from "../components/LoginForm";
+import prisma from "../lib/prisma";
 
-const Home = () => {
+const Home: React.FC<any> = ({ tasks }: InferGetStaticPropsType<typeof getStaticProps>) => {
   const { data: session } = useSession();
+  console.log(tasks);
   return (
-    <div>
+    <div className="flex items-center justify-center min-h-screen bg-gray-40">
       <Head>
-        <title>Business Card</title>
+        <title>Next Tasks</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Header />
-      <div className="flex min-h-screen flex-col items-center justify-center py-2">
+
+      <div className="w-full">
         {session && (
           <>
             Signed in as {session.user && session.user.email} <br />
@@ -24,8 +28,7 @@ const Home = () => {
 
         {!session && (
           <>
-            Not signed in <br />
-            <button onClick={() => signIn()}>Sign in</button>
+            <LoginForm />
           </>
         )}
       </div>
@@ -34,3 +37,9 @@ const Home = () => {
 };
 
 export default Home;
+
+export const getStaticProps: GetStaticProps = async () => {
+  const tasks = await prisma.task.findMany();
+
+  return { props: { tasks: JSON.parse(JSON.stringify(tasks)) } };
+};

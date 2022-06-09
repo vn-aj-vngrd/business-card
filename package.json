@@ -8,6 +8,7 @@
     "lint": "eslint --ext js,jsx,ts,tsx --fix ."
   },
   "dependencies": {
+    "@heroicons/react": "^1.0.6",
     "@next-auth/prisma-adapter": "^1.0.3",
     "@prisma/client": "^3.15.0",
     "next": "latest",

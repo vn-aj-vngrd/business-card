@@ -37,6 +37,17 @@ model Session {
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
+model Task {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  completed   Boolean  @default(false)
+  created_at  DateTime @default(now())
+  updated_at  DateTime @default(now())
+  author      User?    @relation(fields: [authorId], references: [id])
+  authorId    String?
+}
+
 model User {
   id            String    @id @default(cuid())
   name          String?
@@ -45,6 +56,7 @@ model User {
   image         String?
   accounts      Account[]
   sessions      Session[]
+  Task          Task[]
 }
 
 model VerificationToken {
