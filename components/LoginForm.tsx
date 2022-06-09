@@ -1,7 +1,21 @@
 import Link from "next/link";
 import { signIn } from "next-auth/react";
+import { SubmitHandler, useForm } from "react-hook-form";
+
+type Inputs = {
+  email: string;
+  password: string;
+};
 
 const LoginForm = () => {
+  const {
+    register,
+    handleSubmit,
+    // watch,
+    formState: { errors },
+  } = useForm<Inputs>();
+  const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data);
+
   return (
     <>
       <div className="flex flex-col justify-center min-h-full py-12 sm:px-6 lg:px-8">
@@ -13,26 +27,36 @@ const LoginForm = () => {
           /> */}
           <h2 className="mt-6 text-3xl font-extrabold text-center text-gray-900">Tasks</h2>
           <p className="mt-2 font-medium text-center text-indigo-600 hover:text-indigo-500">
-            Sign in to your account
+            Log in to your account
           </p>
         </div>
 
         <div className="mt-4 sm:mx-auto sm:w-full sm:max-w-md">
           <div className="px-4 py-8 bg-white shadow sm:rounded-lg sm:px-10">
-            <form className="space-y-6" action="#" method="POST">
+            <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
               <div>
                 <label htmlFor="email" className="block text-sm font-medium text-gray-700">
                   Email address
                 </label>
                 <div className="mt-1">
                   <input
-                    id="email"
-                    name="email"
                     type="email"
                     autoComplete="email"
-                    required
                     className="block w-full px-3 py-2 placeholder-gray-400 border border-gray-300 rounded-md shadow-sm appearance-none focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    {...register("email", {
+                      required: {
+                        value: true,
+                        message: "Email is required",
+                      },
+                      pattern: {
+                        value: /\S+@\S+\.\S+/,
+                        message: "Email is badly formatted",
+                      },
+                    })}
                   />
+                </div>
+                <div className="mt-3 text-sm text-red-500">
+                  {errors.email && errors.email.message}
                 </div>
               </div>
 
@@ -42,13 +66,23 @@ const LoginForm = () => {
                 </label>
                 <div className="mt-1">
                   <input
-                    id="password"
-                    name="password"
                     type="password"
                     autoComplete="current-password"
-                    required
                     className="block w-full px-3 py-2 placeholder-gray-400 border border-gray-300 rounded-md shadow-sm appearance-none focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    {...register("password", {
+                      required: {
+                        value: true,
+                        message: "Password is required",
+                      },
+                      minLength: {
+                        value: 8,
+                        message: "Password must be at least 8 characters",
+                      },
+                    })}
                   />
+                </div>
+                <div className="mt-3 text-sm text-red-500">
+                  {errors.password && errors.password.message}
                 </div>
               </div>
 
@@ -56,7 +90,7 @@ const LoginForm = () => {
                 <button
                   type="submit"
                   className="flex justify-center w-full px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                  Sign in
+                  Log in
                 </button>
               </div>
             </form>
@@ -72,13 +106,11 @@ const LoginForm = () => {
               </div>
 
               <div className="grid grid-cols-1 gap-3 mt-6">
-                <div>
-                  <button
-                    onClick={() => signIn()}
-                    className="inline-flex justify-center w-full px-4 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50">
-                    Google
-                  </button>
-                </div>
+                <button
+                  onClick={() => signIn()}
+                  className="inline-flex justify-center w-full px-4 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50">
+                  Google
+                </button>
               </div>
             </div>
             <div className="mt-8 text-center text-md">
