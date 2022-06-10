@@ -1,5 +1,6 @@
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { getSession, useSession } from "next-auth/react";
+import { Key } from "react";
 
 import LoginForm from "../components/LoginForm";
 import Meta from "../components/Meta";
@@ -7,9 +8,41 @@ import Spinner from "../components/Spinner";
 import Tasks from "../components/Tasks";
 import prisma from "../lib/prisma";
 
-const Home: React.FC<any> = ({ tasks }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const session = await getSession(context);
+
+  if (!session) {
+    return { props: { tasks: null } };
+  }
+
+  const res = await prisma.task.findMany({
+    where: {
+      userEmail: session.user && session.user.email,
+    },
+  });
+
+  const finishedTasks = res.filter((task) => task.completed);
+  const unfinishedTasks = res.filter((task) => !task.completed);
+
+  const tasks = { finishedTasks, unfinishedTasks };
+
+  return { props: { tasks: JSON.parse(JSON.stringify(tasks)) } };
+};
+
+type Task = {
+  tasks: {
+    id: Key;
+    title: string;
+    description: string;
+    completed: boolean;
+    created_at: string;
+  };
+};
+
+const Home: React.FC<Task> = ({
+  tasks,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const { data: session, status } = useSession();
-  console.log(tasks);
 
   if (status === "loading") {
     return (
@@ -23,7 +56,9 @@ const Home: React.FC<any> = ({ tasks }: InferGetServerSidePropsType<typeof getSe
     return (
       <>
         <Meta title="Tasks | Home" />
-        <Tasks session={session} tasks={tasks} />
+        <div className="flex justify-center min-h-screen bg-gray-40">
+          <Tasks session={session} tasks={tasks} />
+        </div>
       </>
     );
   }
@@ -41,18 +76,3 @@ const Home: React.FC<any> = ({ tasks }: InferGetServerSidePropsType<typeof getSe
 };
 
 export default Home;
-
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const session = await getSession(context);
-
-  if (!session) {
-    return { props: { tasks: null } };
-  }
-
-  const tasks = await prisma.task.findMany({
-    where: {
-      userEmail: session.user && session.user.email,
-    },
-  });
-  return { props: { tasks: JSON.parse(JSON.stringify(tasks)) } };
-};
