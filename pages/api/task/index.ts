@@ -3,14 +3,16 @@ import { getSession } from "next-auth/react";
 
 import prisma from "../../../lib/prisma";
 
-// POST /api/task
-// Required fields in body: title, description
-// Required fields in body:
 export default async function handle(req: NextApiRequest, res: NextApiResponse) {
-  const { title, description } = req.body;
-
   const session = await getSession({ req });
-  if (session) {
+  if (!session) {
+    res.status(401).send({ message: "Unauthorized" });
+  }
+
+  // POST /api/task
+  if (req.method === "POST") {
+    const { title, description } = req.body;
+
     const result = await prisma.task.create({
       data: {
         title: title,
@@ -22,7 +24,19 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
       },
     });
     res.json(result);
-  } else {
-    res.status(401).send({ message: "Unauthorized" });
   }
+
+  // GET /api/task
+  if (req.method === "GET") {
+    const result = await prisma.task.findMany({
+      where: { userEmail: String(session?.user?.email) },
+    });
+
+    const finishedTasks = result.filter((task) => task.completed);
+    const unfinishedTasks = result.filter((task) => !task.completed);
+
+    res.json({ finishedTasks, unfinishedTasks });
+  }
+
+  throw new Error(`The HTTP ${req.method} method is not supported at this route.`);
 }

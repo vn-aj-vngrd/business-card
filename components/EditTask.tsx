@@ -1,6 +1,6 @@
 import { Dialog, Transition } from "@headlessui/react";
-import { ClipboardIcon, ExclamationCircleIcon, PlusCircleIcon } from "@heroicons/react/solid";
-import { Fragment, useRef, useState } from "react";
+import { ClipboardIcon, ExclamationCircleIcon } from "@heroicons/react/solid";
+import { Fragment, Key, useEffect, useRef, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 
 type Inputs = {
@@ -10,9 +10,10 @@ type Inputs = {
 
 type AddTaskProps = {
   onTaskCreated: () => void;
+  task: { id: Key; title: string; description: string; completed: boolean; created_at: string };
 };
 
-const AddTask: React.FC<AddTaskProps> = ({ onTaskCreated }) => {
+const AddTask: React.FC<AddTaskProps> = ({ onTaskCreated, task }) => {
   const [open, setOpen] = useState(false);
   const cancelButtonRef = useRef(null);
 
@@ -23,6 +24,8 @@ const AddTask: React.FC<AddTaskProps> = ({ onTaskCreated }) => {
     // watch,
     formState: { errors },
   } = useForm<Inputs>();
+
+  useEffect(() => {}, [errors]);
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     try {
@@ -45,9 +48,8 @@ const AddTask: React.FC<AddTaskProps> = ({ onTaskCreated }) => {
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="inline-flex items-center px-3 py-2 text-sm font-medium leading-4 text-white bg-blue-500 border border-transparent rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-        Add Task
-        <PlusCircleIcon className="ml-2 -mr-0.5 h-4 w-4" aria-hidden="true" />
+        className="inline-flex items-center px-3 py-2 mr-2 text-xs font-medium leading-4 text-gray-700 border border-gray-300 rounded-md shadow-sm">
+        Edit
       </button>
       <Transition.Root show={open} as={Fragment}>
         <Dialog
