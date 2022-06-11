@@ -9,11 +9,11 @@ type Inputs = {
 };
 
 type AddTaskProps = {
-  onTaskCreated: () => void;
+  onTaskEdited: () => void;
   task: { id: Key; title: string; description: string; completed: boolean; created_at: string };
 };
 
-const AddTask: React.FC<AddTaskProps> = ({ onTaskCreated, task }) => {
+const AddTask: React.FC<AddTaskProps> = ({ onTaskEdited: onTaskEdited, task }) => {
   const [open, setOpen] = useState(false);
   const cancelButtonRef = useRef(null);
 
@@ -25,7 +25,13 @@ const AddTask: React.FC<AddTaskProps> = ({ onTaskCreated, task }) => {
     formState: { errors },
   } = useForm<Inputs>();
 
-  useEffect(() => {}, [errors]);
+  useEffect(() => {
+    const defaultValues = {
+      title: task.title,
+      description: task.description,
+    };
+    reset(defaultValues);
+  }, [reset, task]);
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     try {
@@ -36,7 +42,7 @@ const AddTask: React.FC<AddTaskProps> = ({ onTaskCreated, task }) => {
       });
       reset();
       setOpen(false);
-      onTaskCreated();
+      onTaskEdited();
       console.log("created");
     } catch (error) {
       console.error(error);

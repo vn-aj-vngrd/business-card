@@ -143,7 +143,10 @@ const Tasks = () => {
                                     {!task.completed && (
                                       <>
                                         <div>
-                                          <EditTask />
+                                          <EditTask
+                                            onTaskEdited={() => setRefreshTaskToken(uuid())}
+                                            task={task}
+                                          />
                                         </div>
                                         <div>
                                           <button
