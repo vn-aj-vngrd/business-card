@@ -35,8 +35,8 @@ const AddTask: React.FC<AddTaskProps> = ({ onTaskEdited: onTaskEdited, task }) =
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     try {
-      await fetch(`/api/task`, {
-        method: "POST",
+      await fetch(`/api/task/${task.id}`, {
+        method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       });
@@ -185,7 +185,7 @@ const AddTask: React.FC<AddTaskProps> = ({ onTaskEdited: onTaskEdited, task }) =
                   <button
                     type="submit"
                     className="inline-flex justify-center w-full px-4 py-2 text-base font-medium text-white bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:col-start-2 sm:text-sm">
-                    Add
+                    Save
                   </button>
                 </div>
               </form>

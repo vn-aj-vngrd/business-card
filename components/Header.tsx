@@ -10,7 +10,7 @@ const Header: React.FC<HeaderProps> = ({ session }) => {
       <div className="text-lg font-semibold">
         Hello, {session.user && session.user.name?.split(" ")[0]} 🙋‍♂️
       </div>
-      <div className="text-gray-500"> {moment().format("dddd, MMMM d").toString()}</div>
+      <div className="text-gray-500"> {moment().format("dddd, MMMM D").toString()}</div>
       <div className="text-sm text-gray-500">
         <Clock format={"h:mm:ss a"} ticking={true} timezone={"Asia/Manila"} />
       </div>

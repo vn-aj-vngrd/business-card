@@ -16,15 +16,18 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
     const task = await prisma.task.delete({
       where: { id: String(id) },
     });
-    res.json(task);
+    return res.json(task);
   }
 
+  // UPDATE /api/task/:id
   if (req.method === "PUT") {
+    const { title, description, completed } = req.body;
+
     const updateTask = await prisma.task.update({
       where: { id: String(id) },
-      data: { completed: true },
+      data: { completed, title, description },
     });
-    res.json(updateTask);
+    return res.json(updateTask);
   }
 
   throw new Error(`The HTTP ${req.method} method is not supported at this route.`);

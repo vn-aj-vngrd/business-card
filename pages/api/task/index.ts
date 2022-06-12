@@ -23,7 +23,7 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
         user: { connect: { email: session?.user?.email || "" } },
       },
     });
-    res.json(result);
+    return res.json(result);
   }
 
   // GET /api/task
@@ -35,7 +35,7 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
     const finishedTasks = result.filter((task) => task.completed);
     const unfinishedTasks = result.filter((task) => !task.completed);
 
-    res.json({ finishedTasks, unfinishedTasks });
+    return res.json({ finishedTasks, unfinishedTasks });
   }
 
   throw new Error(`The HTTP ${req.method} method is not supported at this route.`);

@@ -5,7 +5,7 @@ import moment from "moment";
 import { signOut } from "next-auth/react";
 import { Key, useEffect } from "react";
 import { useState } from "react";
-import { uuid } from "uuidv4";
+import { v4 as uuidv4 } from "uuid";
 
 import AddTask from "../components/AddTask";
 import EditTask from "../components/EditTask";
@@ -17,7 +17,6 @@ function classNames(...classes: string[]) {
 const fetchTasks = async () => {
   const res = await fetch(`/api/task`, {
     method: "GET",
-    headers: { "Content-Type": "application/json" },
   });
   const data = await res.json();
 
@@ -51,20 +50,22 @@ const Tasks = () => {
       await fetch(`/api/task/${id}`, {
         method: "DELETE",
       });
-      setRefreshTaskToken(uuid());
+      setRefreshTaskToken(uuidv4());
     } catch (error) {
       console.error(error);
     }
   };
 
   const updateTask = async (task: Task) => {
+    task.completed = true;
+    console.log(task);
     try {
       await fetch(`/api/task/${task.id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ task }),
+        body: JSON.stringify(task),
       });
-      setRefreshTaskToken(uuid());
+      setRefreshTaskToken(uuidv4());
     } catch (error) {
       console.error(error);
     }
@@ -76,7 +77,7 @@ const Tasks = () => {
         <div className="w-96">
           <div className="flex justify-between mb-5">
             <div>
-              <AddTask onTaskCreated={() => setRefreshTaskToken(uuid())} />
+              <AddTask onTaskCreated={() => setRefreshTaskToken(uuidv4())} />
             </div>
             <div>
               <button
@@ -144,7 +145,7 @@ const Tasks = () => {
                                       <>
                                         <div>
                                           <EditTask
-                                            onTaskEdited={() => setRefreshTaskToken(uuid())}
+                                            onTaskEdited={() => setRefreshTaskToken(uuidv4())}
                                             task={task}
                                           />
                                         </div>
