@@ -1,3 +1,4 @@
+import { ExclamationCircleIcon } from "@heroicons/react/solid";
 import Link from "next/link";
 import { signIn } from "next-auth/react";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -43,14 +44,18 @@ const SignupForm = () => {
           <div className="px-4 py-8 bg-white shadow sm:rounded-lg sm:px-10">
             <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
               <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                <label htmlFor="name" className="block text-sm font-medium text-gray-700">
                   Name
                 </label>
-                <div className="mt-1">
+
+                <div className="relative mt-1 rounded-md shadow-sm">
                   <input
                     type="text"
-                    autoComplete="email"
-                    className="block w-full px-3 py-2 placeholder-gray-400 border border-gray-300 rounded-md shadow-sm appearance-none focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    className={
+                      errors.name
+                        ? "block w-full pr-10 text-red-900 placeholder-red-300 border-red-300 rounded-md focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm"
+                        : "block w-full pr-10 text-gray-900 placeholder-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                    }
                     {...register("name", {
                       required: {
                         value: true,
@@ -58,7 +63,13 @@ const SignupForm = () => {
                       },
                     })}
                   />
+                  {errors.name && (
+                    <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                      <ExclamationCircleIcon className="w-5 h-5 text-red-500" aria-hidden="true" />
+                    </div>
+                  )}
                 </div>
+
                 <div className="mt-3 text-sm text-red-500">
                   {errors.name && errors.name.message}
                 </div>
@@ -68,11 +79,16 @@ const SignupForm = () => {
                 <label htmlFor="email" className="block text-sm font-medium text-gray-700">
                   Email address
                 </label>
-                <div className="mt-1">
+
+                <div className="relative mt-1 rounded-md shadow-sm">
                   <input
-                    type="email"
+                    type="text"
                     autoComplete="email"
-                    className="block w-full px-3 py-2 placeholder-gray-400 border border-gray-300 rounded-md shadow-sm appearance-none focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    className={
+                      errors.email
+                        ? "block w-full pr-10 text-red-900 placeholder-red-300 border-red-300 rounded-md focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm"
+                        : "block w-full pr-10 text-gray-900 placeholder-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                    }
                     {...register("email", {
                       required: {
                         value: true,
@@ -84,7 +100,13 @@ const SignupForm = () => {
                       },
                     })}
                   />
+                  {errors.email && (
+                    <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                      <ExclamationCircleIcon className="w-5 h-5 text-red-500" aria-hidden="true" />
+                    </div>
+                  )}
                 </div>
+
                 <div className="mt-3 text-sm text-red-500">
                   {errors.email && errors.email.message}
                 </div>
@@ -94,11 +116,15 @@ const SignupForm = () => {
                 <label htmlFor="password" className="block text-sm font-medium text-gray-700">
                   Password
                 </label>
-                <div className="mt-1">
+                <div className="relative mt-1 rounded-md shadow-sm">
                   <input
                     type="password"
                     autoComplete="current-password"
-                    className="block w-full px-3 py-2 placeholder-gray-400 border border-gray-300 rounded-md shadow-sm appearance-none focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    className={
+                      errors.password
+                        ? "block w-full pr-10 text-red-900 placeholder-red-300 border-red-300 rounded-md focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm"
+                        : "block w-full pr-10 text-gray-900 placeholder-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                    }
                     {...register("password", {
                       required: {
                         value: true,
@@ -110,6 +136,11 @@ const SignupForm = () => {
                       },
                     })}
                   />
+                  {errors.password && (
+                    <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                      <ExclamationCircleIcon className="w-5 h-5 text-red-500" aria-hidden="true" />
+                    </div>
+                  )}
                 </div>
                 <div className="mt-3 text-sm text-red-500">
                   {errors.password && errors.password.message}
@@ -117,14 +148,20 @@ const SignupForm = () => {
               </div>
 
               <div>
-                <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+                <label
+                  htmlFor="confirmPassword"
+                  className="block text-sm font-medium text-gray-700">
                   Confirm Password
                 </label>
-                <div className="mt-1">
+                <div className="relative mt-1 rounded-md shadow-sm">
                   <input
                     type="password"
                     autoComplete="current-password"
-                    className="block w-full px-3 py-2 placeholder-gray-400 border border-gray-300 rounded-md shadow-sm appearance-none focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    className={
+                      errors.confirmPassword
+                        ? "block w-full pr-10 text-red-900 placeholder-red-300 border-red-300 rounded-md focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm"
+                        : "block w-full pr-10 text-gray-900 placeholder-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                    }
                     {...register("confirmPassword", {
                       required: {
                         value: true,
@@ -133,13 +170,18 @@ const SignupForm = () => {
                       validate: (value) => password === value || "Passwords do not match",
                     })}
                   />
+                  {errors.confirmPassword && (
+                    <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                      <ExclamationCircleIcon className="w-5 h-5 text-red-500" aria-hidden="true" />
+                    </div>
+                  )}
                 </div>
                 <div className="mt-3 text-sm text-red-500">
                   {errors.confirmPassword && errors.confirmPassword.message}
                 </div>
               </div>
 
-              <div>
+              <div className="relative mt-1 rounded-md shadow-sm">
                 <button
                   type="submit"
                   className="flex justify-center w-full px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">

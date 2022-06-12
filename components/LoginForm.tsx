@@ -1,3 +1,4 @@
+import { ExclamationCircleIcon } from "@heroicons/react/solid";
 import Link from "next/link";
 import { signIn } from "next-auth/react";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -38,11 +39,15 @@ const LoginForm = () => {
                 <label htmlFor="email" className="block text-sm font-medium text-gray-700">
                   Email address
                 </label>
-                <div className="mt-1">
+                <div className="relative mt-1 rounded-md shadow-sm">
                   <input
-                    type="email"
+                    type="text"
                     autoComplete="email"
-                    className="block w-full px-3 py-2 placeholder-gray-400 border border-gray-300 rounded-md shadow-sm appearance-none focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    className={
+                      errors.email
+                        ? "block w-full pr-10 text-red-900 placeholder-red-300 border-red-300 rounded-md focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm"
+                        : "block w-full pr-10 text-gray-900 placeholder-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                    }
                     {...register("email", {
                       required: {
                         value: true,
@@ -54,6 +59,11 @@ const LoginForm = () => {
                       },
                     })}
                   />
+                  {errors.email && (
+                    <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                      <ExclamationCircleIcon className="w-5 h-5 text-red-500" aria-hidden="true" />
+                    </div>
+                  )}
                 </div>
                 <div className="mt-3 text-sm text-red-500">
                   {errors.email && errors.email.message}
@@ -64,11 +74,15 @@ const LoginForm = () => {
                 <label htmlFor="password" className="block text-sm font-medium text-gray-700">
                   Password
                 </label>
-                <div className="mt-1">
+                <div className="relative mt-1 rounded-md shadow-sm">
                   <input
                     type="password"
                     autoComplete="current-password"
-                    className="block w-full px-3 py-2 placeholder-gray-400 border border-gray-300 rounded-md shadow-sm appearance-none focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    className={
+                      errors.password
+                        ? "block w-full pr-10 text-red-900 placeholder-red-300 border-red-300 rounded-md focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm"
+                        : "block w-full pr-10 text-gray-900 placeholder-gray-300 border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                    }
                     {...register("password", {
                       required: {
                         value: true,
@@ -80,6 +94,11 @@ const LoginForm = () => {
                       },
                     })}
                   />
+                  {errors.password && (
+                    <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                      <ExclamationCircleIcon className="w-5 h-5 text-red-500" aria-hidden="true" />
+                    </div>
+                  )}
                 </div>
                 <div className="mt-3 text-sm text-red-500">
                   {errors.password && errors.password.message}
