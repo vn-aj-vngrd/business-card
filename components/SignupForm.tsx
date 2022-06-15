@@ -40,7 +40,7 @@ const SignupForm = () => {
           </p>
         </div>
 
-        <div className="mt-4 sm:mx-auto sm:w-full sm:max-w-md">
+        <div className="mx-2 mt-4 sm:mx-auto sm:w-full sm:max-w-md">
           <div className="px-4 py-8 bg-white shadow sm:rounded-lg sm:px-10">
             <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
               <div>
